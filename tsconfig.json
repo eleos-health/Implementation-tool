@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "target": "ES6",
+    "lib": [
+      "ES2021.String",
+      "dom"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx"
+  }
+}
