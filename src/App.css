@@ -1,9 +1,35 @@
+.body {
+    background-image: linear-gradient(0deg, rgb(217, 175, 217) 0%, rgb(151, 217, 225) 100%);
+}
+
 .App {
-    color: white;
+    color: black;
     text-align: center;
+    font-size: 18px;
 }
 
 .container {
-    width: 15rem;
-    height: 15rem;
+    height: 100vh;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1677ff;
+    box-shadow: 0 2px 0 rgba(5, 145, 255, 0.1);
+    font-size: 16px;
+    padding: 6px;
+    border-radius: 4px;
+}
+
+.create-note-type-object-button {
+    margin-bottom: 12px;
+}
+
+.generate-jquery-button {
+
 }

@@ -1,0 +1,16 @@
+.field-form {
+    width: 1000px;
+    padding-left: 22px;
+}
+
+.add-field-button {
+    margin-right: 12px;
+}
+
+.actions-control-container {
+    display: flex;
+    justify-content: space-evenly;
+    width: 400px;
+    align-items: center;
+    padding-bottom: 16px;
+}

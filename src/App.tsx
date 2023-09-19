@@ -1,6 +1,12 @@
 import './App.css';
-import { Button } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import {
+  BrowserRouter as Router,
+  Route,
+  Link, Routes,
+} from 'react-router-dom';
+import NoteTypeConfigure from './components/NoteTypeConfigure/NoteTypeConfigure';
+import JqueryGenerator from './components/JqueryGenerator/JqueryGenerator';
 
 const App = () => {
   const [elementSelectorCopyOn, setElementSelectorCopyOn] = useState(false);
@@ -21,18 +27,37 @@ const App = () => {
   };
   const handleJqueryGeneration = () => {
     if (elementSelectorCopyOn) {
-      document.addEventListener('click', copyJqueryString);
-    } else {
       document.removeEventListener('click', copyJqueryString);
+      setElementSelectorCopyOn(false);
+    } else {
+      document.addEventListener('click', copyJqueryString);
+      setElementSelectorCopyOn(true);
     }
   };
 
   return (
-    <div className="App">
-      <h1>Please choose an action</h1>
-      <Button type="primary">Create Note Type object</Button>
-      <Button type="primary" onClick={handleJqueryGeneration}>{elementSelectorCopyOn ? 'Generate jQuery string selector' : ' Turn off'}</Button>
-    </div>
+    <Router>
+      <div className="App">
+        <div >
+          <h1>Please choose an action</h1>
+          <img style={{ height: '32px' }} src="icons/EleosWhiteBg_PoweredBy.svg"></img>
+        </div>
+        <div className="button-container">
+          <Link to="/configure" className="btn btn-primary">Create Note Type object</Link>
+          <Link to="/jquery" className="btn btn-primary">Generate jQuery string selector</Link>
+        </div>
+
+        {/* <Button type="primary">Create Note Type object</Button> */}
+        {/* <Button type="primary" onClick={handleJqueryGeneration}>{!elementSelectorCopyOn? 'Generate jQuery string selector' : ' Turn off'}</Button> */}
+        <Routes>
+          <Route path="/configure" element={<NoteTypeConfigure />}>
+
+          </Route>
+          <Route path="/jquery" element={<JqueryGenerator/>}></Route>
+        </Routes>
+      </div>
+    </Router>
+
   );
 };
 

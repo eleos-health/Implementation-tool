@@ -7,19 +7,10 @@ module.exports = {
     index: './src/index.tsx',
   },
   mode: 'production',
+  devtool: 'source-map',
   module: {
     rules: [
-      {
-        test: /\.tsx?$/,
-        use: [
-          {
-            loader: 'ts-loader',
-            options: {
-              compilerOptions: { noEmit: false },
-            },
-          }],
-        exclude: /node_modules/,
-      },
+      { test: /\.ts|tsx?$/, loader: 'ts-loader' },
       {
         exclude: /node_modules/,
         test: /\.css$/i,
@@ -35,12 +26,14 @@ module.exports = {
       patterns: [
         { from: 'manifest.json', to: '../manifest.json' },
         { from: 'icons', to: 'icons' },
+        { from: 'src/popup', to: 'src/popup' },
+        // { from: 'public', to: 'public' },
       ],
     }),
     ...getHtmlPlugins(['index']),
   ],
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.html'],
   },
   output: {
     path: path.join(__dirname, 'dist/js'),

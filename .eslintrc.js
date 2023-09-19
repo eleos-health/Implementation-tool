@@ -38,6 +38,7 @@ module.exports = {
     'import/no-cycle': 0,
     'no-promise-executor-return': 0,
     'prefer-regex-literals': 0,
+    'import/no-extraneous-dependencies': 0,
     'import/prefer-default-export': 0,
     '@typescript-eslint/no-empty-function': 0,
     '@typescript-eslint/no-explicit-any': 0,

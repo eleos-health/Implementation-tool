@@ -4,7 +4,6 @@
   "manifest_version": 3,
   "description": "This extension is intended to help us configure new clients on existing EHRs",
   "homepage_url": "http://eleos.health",
-  "devtools_page": "src/tools/devtools.html",
   "commands": {
     "_execute_action": {
       "suggested_key": {
@@ -14,8 +13,9 @@
     }
   },
   "action": {
-    "default_popup": "js/index.html",
-    "default_title": "React Chrome Extension"
+    "default_icon": "js/icons/tools.png",
+    "default_popup": "js/src/popup/popup.html",
+    "default_title": "Eleos Implementation Tools"
   },
   "permissions": [
     "alarms",

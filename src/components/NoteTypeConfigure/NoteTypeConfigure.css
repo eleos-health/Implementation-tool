@@ -1,0 +1,31 @@
+.big-form-container {
+    padding-top: 24px;
+}
+
+.form-container {
+    display: inline-block;
+}
+
+.react-json-view {
+    height: 660px;
+    overflow: scroll;
+}
+
+.configure-note-type-container {
+    display: flex;
+    align-items: center;
+}
+
+.fields-and-viewer {
+    display: flex;
+    padding-top: 16px;
+}
+
+.note-type-name-input {
+    width: 40%;
+    float: left;
+}
+
+.remove-field-btn {
+    margin-left: 12px;
+}
