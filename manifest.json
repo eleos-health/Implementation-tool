@@ -18,9 +18,5 @@
     "default_title": "Eleos Implementation Tools"
   },
   "permissions": [
-    "alarms",
-    "storage",
-    "scripting",
-    "system.memory"
   ]
 }

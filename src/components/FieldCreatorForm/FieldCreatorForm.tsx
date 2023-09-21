@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {
-  Form, Input, Select, message, Button, Popconfirm, InputNumber,
+  Form, Input, Select, message, Button, Popconfirm, InputNumber, Modal,
 } from 'antd';
 import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 import './FieldCreatorForm.css';
-import { updateFields, getNoteTypeName } from '../../context/Context';
+import CopyNoteTypeModal from '../CopyNoteTypeModal/CopyNoteTypeModal';
 
 interface FormProps {
     fields: Array<Field>;
@@ -19,7 +19,9 @@ const FieldCreatorForm = (props: FormProps) => {
   const [editValueIndex, setEditValueIndex] = useState(1);
   const [switchValueIndex1, setSwitchValueIndex1] = useState(1);
   const [switchValueIndex2, setSwitchValueIndex2] = useState(1);
+  const [copyModalOpen, setCopyModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [jsonText, setJsonText] = useState('');
   const [form] = Form.useForm();
   const { TextArea } = Input;
 
@@ -58,7 +60,7 @@ const FieldCreatorForm = (props: FormProps) => {
 
   const handleOptions = (key: string, value: string) => {
     if (!value) return;
-    const values = value.split(',').map((val: string) => val.trim());
+    const values = value.split(',').map((val: string, index: number) => [index + 1, val.trim()]);
     const newField = formField;
     newField[key] = values;
     setFormField(newField);
@@ -91,7 +93,6 @@ const FieldCreatorForm = (props: FormProps) => {
 
   const onSaveNewField = (newFields: Field[]) => {
     setFields(newFields);
-    updateFields(newFields);
     success(isEditMode);
     setFormField({});
     form.resetFields();
@@ -123,7 +124,7 @@ const FieldCreatorForm = (props: FormProps) => {
       hidden: false,
       editable: true,
       required: false,
-      db_field_type: `${getDbFieldType(field_type)}${getFieldTypeIndex(field_type)}`,
+      db_field_type: `${getDbFieldType(field_type)}_${getFieldTypeIndex(field_type)}`,
     };
     newFields.push(copyField);
     onSaveNewField(newFields);
@@ -131,7 +132,6 @@ const FieldCreatorForm = (props: FormProps) => {
 
   const clearFormAndFields = () => {
     setFields([]);
-    updateFields([]);
     setFormField({});
     form.resetFields();
     form.setFieldsValue('');
@@ -157,7 +157,6 @@ const FieldCreatorForm = (props: FormProps) => {
     newFields[realValueIndex1] = newFields[realValueIndex2];
     newFields[realValueIndex2] = temp;
     setFields(newFields);
-    updateFields(newFields);
     messageApi.open({
       type: 'success',
       content: 'Switched fields successfully',
@@ -170,6 +169,21 @@ const FieldCreatorForm = (props: FormProps) => {
       type: 'success',
       content: 'Fields successfully copied to clipboard',
     });
+  };
+
+  const onJsonModalSubmit = () => {
+    setCopyModalOpen(false);
+    const copiedFields = JSON.parse(jsonText);
+    copiedFields.map((field) => {
+      if (field.options) {
+        let optionsString = '';
+        field.options.forEach((option) => optionsString += `${option[1]}, `);
+        field.options = optionsString.substring(0, optionsString.length - 2);
+      }
+      return field;
+    });
+    setFields(copiedFields);
+    setJsonText('');
   };
 
   const editInputElement = <InputNumber value={editValueIndex} min={1} max={fields.length} placeholder="#" style={{ width: '50px' }} onChange={(e) => setEditValueIndex(e)}></InputNumber>;
@@ -229,7 +243,17 @@ const FieldCreatorForm = (props: FormProps) => {
           <Button danger>Clear form and fields</Button>
         </Popconfirm>
       </Form.Item>
-      <Button type="primary" onClick={copyToClipboard}>Copy to clipboard</Button>
+      <Button type="primary" onClick={copyToClipboard} style={{ paddingBottom: '12px' }}>Copy to clipboard</Button>
+      <Button type="primary"
+        style={{ paddingBottom: '12px' }}
+        onClick={() => setCopyModalOpen(true)}>
+          Copy from existing note type
+      </Button>
+      <Modal open={copyModalOpen}
+        footer={null}
+        onCancel={() => setCopyModalOpen(false)}>
+        <CopyNoteTypeModal setText={setJsonText} onSubmit={onJsonModalSubmit} jsonText={jsonText}></CopyNoteTypeModal>
+      </Modal>
     </Form>
     {fields.length ? <div style={{ width: '500px', paddingBottom: '12px' }}>Actions:</div> : null}
     {fields.length ? <div className="form-actions-container">
@@ -240,7 +264,7 @@ const FieldCreatorForm = (props: FormProps) => {
             Switch b/w fields {switchInputElement1} and {switchInputElement2} <Button type="primary" onClick={onSwitchButtonClick}>Go</Button>
       </div>
     </div> : null}
-    <div style={{ color: 'red', fontSize: '20px' }}>*Please note that the fields order is important: it has to be the same order the fields are shown in the EHR*</div>
+    <div style={{ color: 'red', fontSize: '20px', paddingTop: '12px' }}>*Please note that the fields order is important: it has to be the same order the fields are shown in the EHR*</div>
   </div>
   );
 };

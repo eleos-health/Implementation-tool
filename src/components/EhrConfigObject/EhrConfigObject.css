@@ -1,0 +1,5 @@
+.ehr-config-ui-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 100px;
+}
