@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './NoteTypeConfigure.css';
 import ReactJson from 'react-json-view';
 import { Form, Input } from 'antd';
-import JSONInput from 'react-json-editor-ajrm';
-import locale from 'react-json-editor-ajrm/locale/en';
 import FieldCreatorForm from '../FieldCreatorForm/FieldCreatorForm';
-import { getFields, updateFields, setNoteTypeName as setStoreNoteTypeName } from '../../context/Context';
+import {
+  getFields, updateFields, setNoteTypeName as setStoreNoteTypeName, getNoteTypeName,
+} from '../../context/Context';
 
 export interface Field {
   subtitle?: string;
@@ -14,24 +14,22 @@ export interface Field {
   field_type?: string;
   section?: string;
   options?: Array<string>;
+  index?: number;
 }
 
 const NoteTypeConfigure = () => {
-  const [fields, setFields] = useState(getFields());
+  const [fields, setFields] = useState([]);
   const [noteTypeName, setNoteTypeName] = useState('');
-
-  const removeLastField = () => {
-    if (!fields.length) return;
-    const copy = { ...fields };
-    copy.pop();
-    setFields(copy);
-    updateFields(copy);
-  };
 
   const setFormFields = (formFields) => {
     setFields(formFields);
     updateFields(formFields);
   };
+
+  useEffect(() => {
+    getFields().then((res) => setFields(res));
+    getNoteTypeName().then((name) => setNoteTypeName(name));
+  }, []);
 
   const fieldsObject = {};
   fieldsObject[noteTypeName] = fields;
@@ -39,18 +37,20 @@ const NoteTypeConfigure = () => {
   return <div className="big-form-container">
     <div className="fields-and-viewer">
       <div className="form-container">
-        <Form.Item label="Note Type Name">
+        <Form.Item label="Note Type Name" style={{ fontWeight: 'bold', paddingLeft: '20px' }}>
           <Input
+            value={noteTypeName}
             className="note-type-name-input"
             onChange={(e) => {
               setStoreNoteTypeName(e.target.value);
               setNoteTypeName(e.target.value);
-            }}>
+            }}
+          >
           </Input>
         </Form.Item>
         <FieldCreatorForm fields={fields} setFields={setFormFields}></FieldCreatorForm>
       </div>
-      <ReactJson src={fields} name={noteTypeName || 'root'}></ReactJson>
+      <ReactJson src={fields} name={noteTypeName || ''} enableClipboard={false}></ReactJson>
     </div>
   </div>;
 };

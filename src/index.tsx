@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 
 const root = document.createElement('div');
@@ -10,6 +11,8 @@ document.body.style = 'background-image: linear-gradient(0deg, rgb(217, 175, 217
 const rootDiv = ReactDOM.createRoot(root);
 rootDiv.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </React.StrictMode>,
 );

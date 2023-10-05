@@ -12,7 +12,7 @@ interface FormProps {
 }
 const FieldCreatorForm = (props: FormProps) => {
   const { setFields, fields } = props;
-  const [formField, setFormField] = useState<Field>({});
+  const [formField, setFormField] = useState<Field>({ field_type: 'textarea' });
   const [textFieldIndex, setTextFieldIndex] = useState(1);
   const [listFieldIndex, setListFieldIndex] = useState(1);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -32,7 +32,7 @@ const FieldCreatorForm = (props: FormProps) => {
     });
   };
 
-  const success = (editMode: boolean, text?: string) => {
+  const success = (editMode: boolean) => {
     messageApi.open({
       type: 'success',
       content: `Field ${editMode ? 'edited' : 'added'} successfully`,
@@ -40,8 +40,10 @@ const FieldCreatorForm = (props: FormProps) => {
   };
 
   const validateKeyDup = (value: string, index?: number) => {
-    const keys = index ? fields.splice(index, 1).map((field) => field.key) : fields.map((field) => field.key);
-    return !keys.includes(value);
+    const keys = index
+      ? fields.splice(index, 1).map((field) => field.key.toLowerCase().trim().replace(/[ \n\r]/g, ''))
+      : fields.map((field) => field.key.toLowerCase().trim().replace(/[ \n\r]/g, ''));
+    return !keys.includes(value.toLowerCase().trim().replace(/[ \n\r]/g, ''));
   };
 
   const updateFormField = (key: string, value: string) => {
@@ -60,29 +62,17 @@ const FieldCreatorForm = (props: FormProps) => {
 
   const handleOptions = (key: string, value: string) => {
     if (!value) return;
-    const values = value.split(',').map((val: string, index: number) => [index + 1, val.trim()]);
+    const values = value.split(',').map((val: string, index: number) => [(index + 1).toString(), val.trim()]);
     const newField = formField;
     newField[key] = values;
     setFormField(newField);
   };
 
-  const getDbFieldType = (type: string) => {
-    switch (type) {
-    case 'checkbox':
-      return 'list_field';
-    case 'dropdown':
-      return 'list_field';
-    default:
-      return 'text_field';
-    }
-  };
+  const getDbFieldType = (type: string) => (type === 'checkbox' ? 'list_field' : 'text_field');
 
   const getFieldTypeIndex = (type: string) => {
     switch (type) {
     case 'checkbox':
-      setListFieldIndex(listFieldIndex + 1);
-      return listFieldIndex;
-    case 'dropdown':
       setListFieldIndex(listFieldIndex + 1);
       return listFieldIndex;
     default:
@@ -111,23 +101,25 @@ const FieldCreatorForm = (props: FormProps) => {
     setIsEditMode(false);
   };
 
-  const addNewField = () => {
+  const addNewField = (values: any) => {
     if (isEditMode) {
       handleEdit();
-      return;
+    } else {
+      if (!values.key) return error('Can\'t add new field: field must include a key');
+      if (!values.title) return error('Can\'t add new field: field must include a title');
+      const newFields = fields;
+      const { field_type } = values;
+      const copyField = {
+        ...formField,
+        hidden: false,
+        editable: true,
+        required: false,
+        db_field_type: `${getDbFieldType(field_type)}_${getFieldTypeIndex(field_type)}`,
+        row_index: fields.length + 1,
+      };
+      newFields.push(copyField);
+      onSaveNewField(newFields);
     }
-    if (!formField.key) return error('Can\'t add new field: field must include a key');
-    const newFields = fields;
-    const { field_type } = formField;
-    const copyField = {
-      ...formField,
-      hidden: false,
-      editable: true,
-      required: false,
-      db_field_type: `${getDbFieldType(field_type)}_${getFieldTypeIndex(field_type)}`,
-    };
-    newFields.push(copyField);
-    onSaveNewField(newFields);
   };
 
   const clearFormAndFields = () => {
@@ -145,7 +137,7 @@ const FieldCreatorForm = (props: FormProps) => {
     form.setFieldValue('title', field.title);
     form.setFieldValue('subtitle', field.subtitle);
     form.setFieldValue('type', field.field_type);
-    form.setFieldValue('options', field.options);
+    form.setFieldValue('options', field.options.map((option) => option[1]));
   };
 
   const onSwitchButtonClick = () => {
@@ -155,7 +147,9 @@ const FieldCreatorForm = (props: FormProps) => {
     const newFields = fields;
     const temp = newFields[realValueIndex1];
     newFields[realValueIndex1] = newFields[realValueIndex2];
+    newFields[realValueIndex1].index = switchValueIndex1;
     newFields[realValueIndex2] = temp;
+    newFields[realValueIndex2].index = switchValueIndex2;
     setFields(newFields);
     messageApi.open({
       type: 'success',
@@ -164,7 +158,10 @@ const FieldCreatorForm = (props: FormProps) => {
   };
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(JSON.stringify(fields));
+    navigator.clipboard.writeText(JSON.stringify(fields.map((field) => {
+      const { index, ...newField } = field;
+      return newField;
+    }), undefined, 4));
     messageApi.open({
       type: 'success',
       content: 'Fields successfully copied to clipboard',
@@ -174,14 +171,6 @@ const FieldCreatorForm = (props: FormProps) => {
   const onJsonModalSubmit = () => {
     setCopyModalOpen(false);
     const copiedFields = JSON.parse(jsonText);
-    copiedFields.map((field) => {
-      if (field.options) {
-        let optionsString = '';
-        field.options.forEach((option) => optionsString += `${option[1]}, `);
-        field.options = optionsString.substring(0, optionsString.length - 2);
-      }
-      return field;
-    });
     setFields(copiedFields);
     setJsonText('');
   };
@@ -192,79 +181,86 @@ const FieldCreatorForm = (props: FormProps) => {
 
   return (<div className="field-form">
     {contextHolder}
-    <Form labelCol={{ span: 4 }}
-      wrapperCol={{ span: 14 }}
-      layout="horizontal"
-      form={form}
-      onFinish={addNewField}
-      style={{ maxWidth: 600 }}>
-      <Form.Item label="Key" name="key" required>
-        <Input onBlur={(e) => updateFormField('key', e.target.value)}></Input>
-      </Form.Item>
-      <Form.Item label="Title" name="title">
-        <Input onBlur={(e) => updateFormField('title', e.target.value)}></Input>
-      </Form.Item>
-      <Form.Item label="Subtitle" name="subtitle">
-        <Input onBlur={(e) => updateFormField('subtitle', e.target.value)}></Input>
-      </Form.Item>
-      <Form.Item noStyle
-        shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
-        {({ getFieldValue }) => ((getFieldValue('type') && getFieldValue('type') !== 'textarea')
-          ? <Form.Item label="Options" name="options">
-            <TextArea
-              style={{ height: 120, resize: 'none' }}
-              onBlur={(e) => handleOptions('options', e.target.value)}
-              placeholder="Please enter values separated by comma">
-            </TextArea>
-          </Form.Item>
-          : null)}
-      </Form.Item>
-      <Form.Item label="Type" name="type">
-        <Select onChange={(value) => {
-          updateFormField('field_type', value);
-        }}>
-          <Select.Option value="textarea">Textarea</Select.Option>
-          <Select.Option value="radio">Radio</Select.Option>
-          <Select.Option value="checkbox">Checkbox</Select.Option>
-          <Select.Option value="dropdown">Dropdown</Select.Option>
-        </Select>
-      </Form.Item>
-      <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
-        <Button type="primary" htmlType="submit" className="add-field-button">
-          {isEditMode ? 'Edit Field' : 'Add Field'}
-        </Button>
-        <Popconfirm
-          description="Are you sure you want to delete all data?"
-          title="Confirm"
-          onConfirm={clearFormAndFields}
-          okText="Yes"
-          cancelText="No"
-          style={{ paddingTop: '12px' }}>
-          <Button danger>Clear form and fields</Button>
-        </Popconfirm>
-      </Form.Item>
-      <Button type="primary" onClick={copyToClipboard} style={{ paddingBottom: '12px' }}>Copy to clipboard</Button>
-      <Button type="primary"
-        style={{ paddingBottom: '12px' }}
-        onClick={() => setCopyModalOpen(true)}>
+    <div className="form-fields-container">
+      <Form labelCol={{ span: 4 }}
+        wrapperCol={{ span: 14 }}
+        layout="horizontal"
+        form={form}
+        onFinish={addNewField}
+        style={{ maxWidth: 600 }}>
+        <Form.Item label="Key" name="key" required>
+          <Input onBlur={(e) => updateFormField('key', e.target.value)}></Input>
+        </Form.Item>
+        <Form.Item label="Title" name="title" required>
+          <Input onBlur={(e) => updateFormField('title', e.target.value)}></Input>
+        </Form.Item>
+        <Form.Item label="Subtitle" name="subtitle">
+          <Input onBlur={(e) => updateFormField('subtitle', e.target.value)}></Input>
+        </Form.Item>
+        <Form.Item noStyle
+          shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
+          {({ getFieldValue }) => ((getFieldValue('type') && getFieldValue('type') !== 'textarea')
+            ? <Form.Item label="Options" name="options">
+              <TextArea
+                style={{ height: 120, resize: 'none' }}
+                onBlur={(e) => handleOptions('options', e.target.value)}
+                placeholder="Please enter values separated by comma">
+              </TextArea>
+            </Form.Item>
+            : null)}
+        </Form.Item>
+        <Form.Item label="Type" name="type">
+          <Select defaultValue="textarea" onChange={(value) => {
+            updateFormField('field_type', value);
+          }}>
+            <Select.Option value="textarea">Text area</Select.Option>
+            <Select.Option value="radio">Radio</Select.Option>
+            <Select.Option value="checkbox">Checkbox</Select.Option>
+            <Select.Option value="dropdown">Dropdown</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
+          <Button type="primary" htmlType="submit" className="add-field-button">
+            {isEditMode ? 'Edit Field' : 'Add Field'}
+          </Button>
+          <Popconfirm
+            description="Are you sure you want to delete all data?"
+            title="Confirm"
+            onConfirm={clearFormAndFields}
+            okText="Yes"
+            cancelText="No"
+            style={{ paddingTop: '12px' }}>
+            <Button danger>Clear form and fields</Button>
+          </Popconfirm>
+        </Form.Item>
+        <Button type="primary" onClick={copyToClipboard} style={{ marginRight: '12px' }}>Copy to clipboard</Button>
+        <Button type="primary"
+          style={{ paddingBottom: '12px' }}
+          onClick={() => setCopyModalOpen(true)}>
           Copy from existing note type
-      </Button>
-      <Modal open={copyModalOpen}
-        footer={null}
-        onCancel={() => setCopyModalOpen(false)}>
-        <CopyNoteTypeModal setText={setJsonText} onSubmit={onJsonModalSubmit} jsonText={jsonText}></CopyNoteTypeModal>
-      </Modal>
-    </Form>
-    {fields.length ? <div style={{ width: '500px', paddingBottom: '12px' }}>Actions:</div> : null}
-    {fields.length ? <div className="form-actions-container">
-      <div className="actions-control-container" style={{ display: 'flex' }}>
+        </Button>
+        <Modal open={copyModalOpen}
+          footer={null}
+          onCancel={() => setCopyModalOpen(false)}>
+          <CopyNoteTypeModal setText={setJsonText} onSubmit={onJsonModalSubmit} jsonText={jsonText}></CopyNoteTypeModal>
+        </Modal>
+      </Form>
+    </div>
+    {fields.length ? <div className="actions-container">
+      <div style={{
+        width: '500px', paddingBottom: '12px', paddingTop: '12px', fontWeight: 'bold',
+      }}>Actions:</div>
+      <div className="form-actions-container">
+        <div className="actions-control-container" style={{ display: 'flex' }}>
             Edit field  {editInputElement} <Button type="primary" onClick={onEditButtonClick}>Go</Button>
-      </div>
-      <div className="actions-control-container" style={{ display: 'flex' }}>
+        </div>
+        <div className="actions-control-container" style={{ display: 'flex' }}>
             Switch b/w fields {switchInputElement1} and {switchInputElement2} <Button type="primary" onClick={onSwitchButtonClick}>Go</Button>
+        </div>
       </div>
     </div> : null}
-    <div style={{ color: 'red', fontSize: '20px', paddingTop: '12px' }}>*Please note that the fields order is important: it has to be the same order the fields are shown in the EHR*</div>
+
+    <div style={{ color: 'red', fontSize: '20px', paddingTop: '20px' }}>*Please note that the fields order is important: it has to be the same order the fields are shown in the EHR*</div>
   </div>
   );
 };

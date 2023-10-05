@@ -20,12 +20,18 @@ const CopyNoteTypeModal = (props: CopyModalProps) => {
 
   const onTextChange = (value: string) => {
     try {
-      JSON.parse(value || '{}');
+      let fields = JSON.parse(value || '{}');
+      if (fields.isArray) {
+        fields = JSON.parse(value || '{}').map((field, i: number) => {
+          field.row_index = i + 1;
+          return field;
+        });
+      }
       setIsValid(true);
-      setText(JSON.stringify(JSON.parse(value || '{}'), undefined, 4));
+      setText(JSON.stringify(fields, undefined, 4));
     } catch (err) {
       setIsValid(false);
-      setError(err);
+      setError(err.message);
       setText(value);
     }
   };
@@ -37,15 +43,15 @@ const CopyNoteTypeModal = (props: CopyModalProps) => {
     </>
     : <>
       <ExclamationCircleOutlined style={{ color: '#F24822' }} />
-      <div>Invalid JSON Text</div>
+      <div>Invalid JSON Text:</div>
       <div>{error}</div>
     </>);
 
-  return <div style={{ height: '470px' }}>
+  return <div style={{ height: '500px' }}>
     <h2>Please enter your Note Type text:</h2>
-    <div className="note-status">{isValidJsonIndication()}</div>
+    {jsonText && <div className="note-status">{isValidJsonIndication()}</div>}
     <TextArea rows={16} onChange={(e) => onTextChange(e.target.value)} value={jsonText}></TextArea>
-    <Button type="primary" onClick={() => onSubmit()} style={{ marginTop: '12px' }}>OK</Button>
+    <Button type={isValid ? 'primary' : null} disabled={!isValid} onClick={() => onSubmit()} style={{ marginTop: '12px', cursor: isValid ? 'pointer' : 'not-allowed' }}>OK</Button>
   </div>;
 };
 

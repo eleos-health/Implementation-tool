@@ -14,3 +14,17 @@
     align-items: center;
     padding-bottom: 16px;
 }
+
+.form-fields-container {
+    padding: 20px;
+    width: 600px;
+    border: solid 0.5px;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+}
+
+.actions-container {
+    margin: 20px 0;
+    width: 600px;
+    border: solid 0.5px;
+    box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+}
