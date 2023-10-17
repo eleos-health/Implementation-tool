@@ -60,6 +60,17 @@ const EhrConfigObject = () => {
 
   const shouldDisplayTipMessage = () => ehr && !['carelogic', 'crediblebh', 'welligent'].includes(ehr);
 
+  const handleObjectViewerChange = (event: {jsObject: any, error: any}) => {
+    if (event.jsObject) {
+      setConfigurationObject(event.jsObject);
+    } else {
+      messageApi.open({
+        type: 'error',
+        content: `Error parsing JSON object: ${event.error.reason}`,
+      });
+    }
+  };
+
   return <div className="ehr-config-ui-container">
     {contextHolder}
     <div className="ehr-config-ui-left-side">
@@ -86,7 +97,10 @@ const EhrConfigObject = () => {
             the URL string</div>}
       {ehr && <Button type="primary" onClick={copyToClipboard} style={{ marginTop: '12px' }}>Copy to clipboard</Button>}
     </div>
-    <JSONInput locale={locale} placeholder={configurationObject} style={{ outerBox: { textAlign: 'left' } }}></JSONInput>
+    <JSONInput locale={locale}
+      placeholder={configurationObject}
+      style={{ outerBox: { textAlign: 'left' } }}
+      onBlur={handleObjectViewerChange}></JSONInput>
   </div>;
 };
 
