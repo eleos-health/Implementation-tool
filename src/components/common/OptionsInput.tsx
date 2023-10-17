@@ -59,7 +59,7 @@ const OptionsInput = (props: any) => {
       />
     ) : (
       <Tag onClick={showInput} style={tagPlusStyle}>
-        <PlusOutlined /> New Tag
+        <PlusOutlined /> Add Option
       </Tag>
     )}
   </div>;
