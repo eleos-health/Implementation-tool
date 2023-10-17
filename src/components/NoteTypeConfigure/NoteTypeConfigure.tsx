@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './NoteTypeConfigure.css';
 import ReactJson from 'react-json-view';
-import { Form, Input } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Form, Input, Tooltip } from 'antd';
 import FieldCreatorForm from '../FieldCreatorForm/FieldCreatorForm';
 import {
-  getFields, updateFields, setNoteTypeName as setStoreNoteTypeName, getNoteTypeName,
+  getFields, updateFields, setNoteTypeName as setStoreNoteTypeName, getNoteTypeName, getNoteHeadline, setNoteHeadline as setStoreNoteTypeHeadline,
 } from '../../context/Context';
 
 export interface Field {
@@ -20,6 +21,7 @@ export interface Field {
 const NoteTypeConfigure = () => {
   const [fields, setFields] = useState([]);
   const [noteTypeName, setNoteTypeName] = useState('');
+  const [noteHeadline, setNoteHeadline] = useState('');
 
   const setFormFields = (formFields) => {
     setFields(formFields);
@@ -29,6 +31,7 @@ const NoteTypeConfigure = () => {
   useEffect(() => {
     getFields().then((res) => setFields(res));
     getNoteTypeName().then((name) => setNoteTypeName(name));
+    getNoteHeadline().then((headline) => setNoteHeadline(headline));
   }, []);
 
   const fieldsObject = {};
@@ -40,10 +43,27 @@ const NoteTypeConfigure = () => {
         <Form.Item label="Note Type Name" style={{ fontWeight: 'bold', paddingLeft: '20px' }}>
           <Input
             value={noteTypeName}
-            className="note-type-name-input"
+            className="note-inputs"
             onChange={(e) => {
               setStoreNoteTypeName(e.target.value);
               setNoteTypeName(e.target.value);
+            }}
+          >
+          </Input>
+        </Form.Item>
+
+        <Form.Item label={
+          <div>EHR Note Headline
+            <Tooltip title="Go to the EHR note and copy and past the exact note headline" >
+              <InfoCircleOutlined className="ehr-session-info-tooltip" style={{ padding: '6px' }} />
+            </Tooltip></div>}
+        style={{ fontWeight: 'bold', paddingLeft: '20px' }}>
+          <Input
+            value={noteHeadline}
+            className="note-inputs"
+            onChange={(e) => {
+              setStoreNoteTypeHeadline(e.target.value);
+              setNoteHeadline(e.target.value);
             }}
           >
           </Input>

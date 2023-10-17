@@ -1,6 +1,6 @@
 {
   "name": "Eleos Health EHR Implementation tools",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "manifest_version": 3,
   "description": "This extension is intended to help us configure new clients on existing EHRs",
   "homepage_url": "http://eleos.health",

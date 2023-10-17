@@ -3,6 +3,7 @@ import { Field } from '../components/NoteTypeConfigure/NoteTypeConfigure';
 const Context: {
   noteTypeName?: string;
   fields?: Array<Field>
+  noteHeadline? :string
 } = { };
 
 export const getFields = async () => {
@@ -25,4 +26,15 @@ export const getNoteTypeName = async () => {
 export const setNoteTypeName = (name: string) => {
   Context.noteTypeName = name;
   chrome.storage.local.set({ reportName: name });
+};
+
+export const getNoteHeadline = async () => {
+  const data = await (chrome.storage.local.get('noteHeadline') as any) || [];
+  Context.noteHeadline = data.noteHeadline;
+  return Context.noteHeadline || '';
+};
+
+export const setNoteHeadline = (headline: string) => {
+  Context.noteHeadline = headline;
+  chrome.storage.local.set({ noteHeadline: headline });
 };

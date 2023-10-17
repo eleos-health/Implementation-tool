@@ -5,6 +5,7 @@ import {
 import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 import './FieldCreatorForm.css';
 import CopyNoteTypeModal from '../CopyNoteTypeModal/CopyNoteTypeModal';
+import OptionsInput from '../common/OptionsInput';
 
 interface FormProps {
     fields: Array<Field>;
@@ -60,11 +61,11 @@ const FieldCreatorForm = (props: FormProps) => {
     setFormField({ ...newField });
   };
 
-  const handleOptions = (key: string, value: string) => {
-    if (!value) return;
-    const values = value.split(',').map((val: string, index: number) => [(index + 1).toString(), val.trim()]);
+  const handleOptions = (key: string, values: Array<string>) => {
+    if (!values) return;
+    const newValues = values.map((val: string, index: number) => [(index + 1).toString(), val.trim()]);
     const newField = formField;
-    newField[key] = values;
+    newField[key] = newValues;
     setFormField(newField);
   };
 
@@ -108,13 +109,14 @@ const FieldCreatorForm = (props: FormProps) => {
       if (!values.key) return error('Can\'t add new field: field must include a key');
       if (!values.title) return error('Can\'t add new field: field must include a title');
       const newFields = fields;
-      const { field_type } = values;
+      const { type } = values;
       const copyField = {
         ...formField,
+        field_type: formField.field_type || 'textarea',
         hidden: false,
         editable: true,
         required: false,
-        db_field_type: `${getDbFieldType(field_type)}_${getFieldTypeIndex(field_type)}`,
+        db_field_type: `${getDbFieldType(type)}_${getFieldTypeIndex(type)}`,
         row_index: fields.length + 1,
       };
       newFields.push(copyField);
@@ -201,11 +203,7 @@ const FieldCreatorForm = (props: FormProps) => {
           shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
           {({ getFieldValue }) => ((getFieldValue('type') && getFieldValue('type') !== 'textarea')
             ? <Form.Item label="Options" name="options">
-              <TextArea
-                style={{ height: 120, resize: 'none' }}
-                onBlur={(e) => handleOptions('options', e.target.value)}
-                placeholder="Please enter values separated by comma">
-              </TextArea>
+              <OptionsInput optionsHandler={handleOptions}></OptionsInput>
             </Form.Item>
             : null)}
         </Form.Item>

@@ -27,7 +27,7 @@ export const credibleConfig = {
       parent_selector: 'div.toolHead:has(h1:contains(\'Counseling/Therapy Note\'))',
     },
   ],
-  note_types_regex: 'North Star: Individual Therapy:.*|North Star: Ind Ther- Telehealth:.*|Journey: Ind Ther- Telehealth:.*|Journey: Individual Therapy:.*|Next Step: Ind Ther - Telehealth:.*|Next Step: Individual Therapy:.*|.*CFT CM.*|.*CFT Case Management:.*',
+  note_types_regex: '.*',
   session_analytics: {
     parent_selector: 'div.toolHead:has(h1)',
   },

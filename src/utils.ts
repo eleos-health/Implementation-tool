@@ -6,6 +6,7 @@ import { credibleConfig } from './configurations/Credible';
 import { myevolveConfig } from './configurations/Myevolve';
 import { ehanaConfig } from './configurations/Ehana';
 import { welligentConfig } from './configurations/Welligent';
+import { EchoConfig } from './configurations/Echo';
 import { smartcareConfig } from './configurations/Smartcare';
 import { advancedmd } from './configurations/Advancedmd';
 
@@ -28,7 +29,7 @@ export const getEhrBasicObject = (ehr: string) => {
   case 'welligent':
     return welligentConfig;
   case 'echo':
-    return ehanaConfig;
+    return EchoConfig;
   case 'smartcare':
     return smartcareConfig;
   case 'advencedmd':

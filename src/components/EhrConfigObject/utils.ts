@@ -9,7 +9,7 @@ export const getFieldIdentifier = (ehr: string, title: string) => {
   case 'pce':
     return `tr:has(span:contains(${title || ''})):contains():last`;
   case 'crediblebh':
-    return `tr:has(table:has(td:contains(${title || ''})):last) + tr`;
+    return `tr:has(table:has(td:contains(${title || ''})):last)`;
   case 'myevolve':
     return `div.clearfix:has(label[class*='testQuestionLabel']:contains(${title || ''})):contains()`;
   case 'ehana':
@@ -18,6 +18,35 @@ export const getFieldIdentifier = (ehr: string, title: string) => {
     return `tr:has(td:contains(${title || ''})):last()`;
   case 'echo':
     return `[id*='${title || ''}']`;
+  case 'smartcare':
+    return;
+  case 'advencedmd':
+    return;
+  default:
+    return '';
+  }
+};
+
+export const getEhrNoteContextIdentifier = (ehr: string, value: string) => {
+  switch (ehr) {
+  case 'carelogic':
+    return `caption:contains(${value || ''})`;
+  case 'myavatarnx':
+    return `div.formactivebutton:contains(${value || ''})`;
+  case 'kipu':
+    return `div#sub_nav_content div#evaluation:contains(Progress Note-), div#sub_nav_content div#evaluation:contains(${value || ''})`;
+  case 'pce':
+    return `div.vScrn_PageContentWIndex:contains(${value || ''})`;
+  case 'crediblebh':
+    return `div.toolHead:has(h1:contains(${value || ''}))`;
+  case 'myevolve':
+    return `div div:contains(${value || ''}) iframe[src*=\\'Form.aspx\\'],iframe[name*=\\'Psychotherapy\\']:visible`;
+  case 'ehana':
+    return `td[class='Workflow_TOC_NameCell'] span:contains(${value || ''}):contains()`;
+  case 'welligent':
+    return `title:contains(${value || ''})`;
+  case 'echo':
+    return `button[class*='v-nativebutton-echotabsheet-tabitem-selected']:has(span:contains(${value || ''}))`;
   case 'smartcare':
     return;
   case 'advencedmd':

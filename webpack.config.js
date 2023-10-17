@@ -44,7 +44,7 @@ module.exports = {
 function getHtmlPlugins(chunks) {
   return chunks.map(
     (chunk) => new HTMLPlugin({
-      title: 'React extension',
+      title: 'Eleos Implementation Tool',
       filename: `${chunk}.html`,
       chunks: [chunk],
     }),

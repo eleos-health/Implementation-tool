@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Button, message, Select } from 'antd';
+import {
+  Button, Input, message, Select,
+} from 'antd';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
-import { getFields, getNoteTypeName } from '../../context/Context';
+import { getFields, getNoteHeadline, getNoteTypeName } from '../../context/Context';
 import './EhrConfigObject.css';
 import { getEhrBasicObject } from '../../utils';
-import { getFieldIdentifier } from './utils';
+import { getEhrNoteContextIdentifier, getFieldIdentifier } from './utils';
 
 const EhrConfigObject = () => {
   const [fields, setFields] = useState([]);
   const [noteTypeName, setNoteTypeName] = useState('');
+  const [noteHeadline, setNoteHeadline] = useState('');
   const [ehr, setEhr] = useState('');
   const [configurationObject, setConfigurationObject] = useState({});
   const [messageApi, contextHolder] = message.useMessage();
@@ -17,6 +20,7 @@ const EhrConfigObject = () => {
   useEffect(() => {
     getFields().then((res) => setFields(res));
     getNoteTypeName().then((name) => setNoteTypeName(name));
+    getNoteHeadline().then((headline) => setNoteHeadline(headline));
   }, []);
 
   const onEhrSelect = (value: string) => {
@@ -29,6 +33,7 @@ const EhrConfigObject = () => {
     });
     ehrConfigObj.progress_notes[0].report_fields = reportFields;
     ehrConfigObj.progress_notes[0].type = noteTypeName;
+    ehrConfigObj.progress_notes[0].context = getEhrNoteContextIdentifier(value, noteHeadline);
     setConfigurationObject(ehrConfigObj);
   };
 
