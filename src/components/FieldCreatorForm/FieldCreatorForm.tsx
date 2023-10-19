@@ -24,7 +24,6 @@ const FieldCreatorForm = (props: FormProps) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [jsonText, setJsonText] = useState('');
   const [form] = Form.useForm();
-  const { TextArea } = Input;
 
   const error = (textMsg: string) => {
     messageApi.open({
