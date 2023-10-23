@@ -15,7 +15,7 @@ export const myAvatarConfig = {
     {
       type: 'GaudenziaGroupReport',
       context: 'div.formactivebutton:contains(\'Group Default Notes\')',
-      category: 'group-notes',
+      category: 'notes',
       report_fields: {},
       submit_button: 'input[value=\'File Note\']',
       parent_selector: 'div.rad-page:has(ngx-gridster-item:has(label:contains(\'Note\'))):contains():last',
