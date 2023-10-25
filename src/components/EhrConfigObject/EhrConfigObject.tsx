@@ -12,17 +12,12 @@ import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 
 const EhrConfigObject = () => {
   const [noteTypes, setNoteTypes] = useState([]);
-  // const [fields, setFields] = useState([]);
-  // const [noteTypeName, setNoteTypeName] = useState('');
-  // const [noteHeadline, setNoteHeadline] = useState('');
   const [ehr, setEhr] = useState('');
   const [configurationObject, setConfigurationObject] = useState({});
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
     getAllNoteTypes().then((res) => setNoteTypes(res));
-    // getNoteTypeName(index).then((name) => setNoteTypeName(name));
-    // getNoteHeadline(index).then((headline) => setNoteHeadline(headline));
   }, []);
 
   const onEhrSelect = (value: string) => {
