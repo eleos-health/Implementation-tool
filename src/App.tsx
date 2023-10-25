@@ -7,6 +7,7 @@ import {
 } from 'react-router-dom';
 import NoteTypeConfigure from './components/NoteTypeConfigure/NoteTypeConfigure';
 import EhrConfigObject from './components/EhrConfigObject/EhrConfigObject';
+import CollapsedNoteTypes from './components/CollapsedNoteTypes/CollapsedNoteTypes';
 
 const App = () => {
   // const [elementSelectorCopyOn, setElementSelectorCopyOn] = useState(false);
@@ -52,8 +53,7 @@ const App = () => {
   return (
     <div className="App">
       <div >
-        <h1>Please choose an action</h1>
-        <img style={{ height: '32px' }} src="icons/EleosWhiteBg_PoweredBy.svg"></img>
+        <img style={{ height: '48px' }} src="icons/EleosWhiteBg_PoweredBy.svg"></img>
       </div>
       <div className="button-container">
         <Link to="/configure" className="btn btn-primary">Create Note Type object</Link>
@@ -63,7 +63,7 @@ const App = () => {
       {/* <Button type="primary">Create Note Type object</Button> */}
       {/* <Button type="primary" onClick={handleJqueryGeneration}>{!elementSelectorCopyOn ? 'Generate jQuery string selector' : ' Turn off'}</Button> */}
       <Routes>
-        <Route path="/configure" element={<NoteTypeConfigure />}>
+        <Route path="/configure" element={<CollapsedNoteTypes />}>
         </Route>
         <Route path="/jquery" element={<EhrConfigObject/>}></Route>
       </Routes>
