@@ -19,12 +19,14 @@ const OptionsInput = (props: any) => {
   };
 
   const handleInputConfirm = () => {
+    const newOptions = [...options];
     if (inputValue && options.indexOf(inputValue) === -1) {
-      setOptions([...options, inputValue]);
+      newOptions.push(inputValue);
+      setOptions(newOptions);
     }
     setInputVisible(false);
     setInputValue('');
-    optionsHandler('options', options);
+    optionsHandler('options', newOptions);
   };
 
   const showInput = () => {
