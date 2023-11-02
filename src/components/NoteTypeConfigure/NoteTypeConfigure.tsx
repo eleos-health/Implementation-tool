@@ -17,6 +17,7 @@ export interface Field {
   field_type?: string;
   section?: string;
   options?: Array<string>;
+  conditions?: Array<{key: string; values: Array<string>}>;
   index?: number;
 }
 
