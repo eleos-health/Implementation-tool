@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Button, Form, Input, InputNumber, message, Modal, Popconfirm, Select, Checkbox,
+  Button, Form, Input, InputNumber, message, Modal, Popconfirm, Select,
 } from 'antd';
-import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 import './FieldCreatorForm.css';
 import CopyNoteTypeModal from '../CopyNoteTypeModal/CopyNoteTypeModal';
 import OptionsInput from '../common/OptionsInput';
+import ConditionalFieldsModal from '../ConditionalFieldsModal/ConditionalFieldsModal';
 
 interface FormProps {
     fields: Array<Field>;
@@ -15,16 +15,12 @@ interface FormProps {
 const FieldCreatorForm = (props: FormProps) => {
   const { setFields, fields } = props;
   const [formField, setFormField] = useState<Field>({ field_type: 'textarea' });
-  const [conditionalField, setConditionalField] = useState([]);
-  const [selectedField, setSelectedField] = useState(null);
-  const [disabled, setDisabled] = useState(false);
   const [textFieldIndex, setTextFieldIndex] = useState(1);
   const [listFieldIndex, setListFieldIndex] = useState(1);
   const [isEditMode, setIsEditMode] = useState(false);
   const [editValueIndex, setEditValueIndex] = useState(1);
   const [switchValueIndex1, setSwitchValueIndex1] = useState(1);
   const [switchValueIndex2, setSwitchValueIndex2] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [copyModalOpen, setCopyModalOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [jsonText, setJsonText] = useState('');
@@ -182,41 +178,6 @@ const FieldCreatorForm = (props: FormProps) => {
     setJsonText('');
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleClear = () => {
-    setSelectedField(null);
-    setDisabled(false);
-  };
-
-  const handleOk = () => {
-    updateFormField('conditions', conditionalField);
-    handleClear();
-    setConditionalField([]);
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    handleClear();
-    setIsModalOpen(false);
-  };
-
-  const handleFieldSelect = (field) => {
-    setDisabled(true);
-    setSelectedField(field);
-  };
-
-  const onCheckboxChange = (checkedValues: CheckboxValueType[]) => {
-    const conditionalObjects = [];
-    const newField = {
-      key: selectedField[0],
-      values: checkedValues,
-    };
-    conditionalObjects.push(newField);
-    setConditionalField(conditionalObjects);
-  };
-
   const editInputElement = <InputNumber value={editValueIndex} min={1} max={fields.length} placeholder="#" style={{ width: '50px' }} onChange={(e) => setEditValueIndex(e)}></InputNumber>;
   const switchInputElement1 = <InputNumber value={switchValueIndex1} min={1} max={fields.length} placeholder="#" style={{ width: '50px' }} onChange={(e) => setSwitchValueIndex1(e)}></InputNumber>;
   const switchInputElement2 = <InputNumber value={switchValueIndex2} min={1} max={fields.length} placeholder="#" style={{ width: '50px' }} onChange={(e) => setSwitchValueIndex2(e)}></InputNumber>;
@@ -260,30 +221,7 @@ const FieldCreatorForm = (props: FormProps) => {
         <Form.Item noStyle shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
           {({ getFieldValue }) => (getFieldValue('type') === 'textarea' || !(getFieldValue('type'))
             ? <Form.Item label="Conditions" name="conditions">
-              <Button type="primary" onClick={showModal}>Add Conditions</Button>
-              <Modal title="Add Conditions" open={isModalOpen} okText={'Add'} onOk={handleOk} okButtonProps={!selectedField && { disabled: true }} onCancel={handleCancel}>
-                <div>
-                  <h3>Please select which field you would like to add conditions:</h3>
-                  <Checkbox.Group
-                    options={fields.filter((field) => field.field_type !== 'textarea').map((field) => field.key)}
-                    value={selectedField || []}
-                    disabled={disabled}
-                    onChange={handleFieldSelect}
-                  />
-                </div>
-                {selectedField && (
-                  <div>
-                    <h3>Please select to which options you want to add condition:</h3>
-                    <Checkbox.Group
-                      options={fields.filter((field) => field.key === selectedField[0])[0]?.options.map(([index, value]) => ({
-                        label: value,
-                        value: index,
-                      }))}
-                      onChange={onCheckboxChange}
-                    />
-                  </div>
-                )}
-              </Modal>
+              <ConditionalFieldsModal fields={fields} updateFormField={updateFormField}/>
             </Form.Item> : null)}
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
