@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import {
-  Form, Input, Select, message, Button, Popconfirm, InputNumber, Modal,
+  Button, Form, Input, InputNumber, message, Modal, Popconfirm, Select,
 } from 'antd';
 import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 import './FieldCreatorForm.css';
 import CopyNoteTypeModal from '../CopyNoteTypeModal/CopyNoteTypeModal';
 import OptionsInput from '../common/OptionsInput';
+import ConditionalFieldsModal from '../ConditionalFieldsModal/ConditionalFieldsModal';
 
 interface FormProps {
     fields: Array<Field>;
@@ -46,10 +47,10 @@ const FieldCreatorForm = (props: FormProps) => {
     return !keys.includes(value.toLowerCase().trim().replace(/[ \n\r]/g, ''));
   };
 
-  const updateFormField = (key: string, value: string) => {
+  const updateFormField = (key: string, value: string | Array<{key: string; values: Array<string>}>) => {
     if (!value) return;
     if (key === 'key') {
-      if (!validateKeyDup(value)) {
+      if (!validateKeyDup(value as string)) {
         form.setFieldValue('key', '');
         error('Can\'t have duplicate string "key" on the same note type, please choose another value');
         return;
@@ -139,6 +140,7 @@ const FieldCreatorForm = (props: FormProps) => {
     form.setFieldValue('subtitle', field.subtitle);
     form.setFieldValue('type', field.field_type);
     form.setFieldValue('options', field.options.map((option) => option[1]));
+    form.setFieldValue('conditions', field.conditions);
   };
 
   const onSwitchButtonClick = () => {
@@ -215,6 +217,12 @@ const FieldCreatorForm = (props: FormProps) => {
             <Select.Option value="checkbox">Checkbox</Select.Option>
             <Select.Option value="dropdown">Dropdown</Select.Option>
           </Select>
+        </Form.Item>
+        <Form.Item noStyle shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
+          {({ getFieldValue }) => (getFieldValue('type') === 'textarea' || !(getFieldValue('type'))
+            ? <Form.Item label="Conditions" name="conditions">
+              <ConditionalFieldsModal fields={fields} updateFormField={updateFormField}/>
+            </Form.Item> : null)}
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
           <Button type="primary" htmlType="submit" className="add-field-button">
