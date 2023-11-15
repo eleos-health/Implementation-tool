@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './NoteTypeConfigure.css';
 import ReactJson from 'react-json-view';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import {
-  Button, Form, Input, Popconfirm, Tooltip,
-} from 'antd';
+import { Form, Input, Tooltip } from 'antd';
 import FieldCreatorForm from '../FieldCreatorForm/FieldCreatorForm';
 import {
   getFields, updateFields, setNoteTypeName as setStoreNoteTypeName, getNoteTypeName, getNoteHeadline, setNoteHeadline as setStoreNoteTypeHeadline,
@@ -21,21 +19,20 @@ export interface Field {
   index?: number;
 }
 
-const NoteTypeConfigure = (props) => {
-  const { index, onRemove } = props;
+const NoteTypeConfigure = () => {
   const [fields, setFields] = useState([]);
   const [noteTypeName, setNoteTypeName] = useState('');
   const [noteHeadline, setNoteHeadline] = useState('');
 
-  const setFormFields = (formFields: any) => {
+  const setFormFields = (formFields) => {
     setFields(formFields);
-    updateFields(formFields, index);
+    updateFields(formFields);
   };
 
   useEffect(() => {
-    getFields(index).then((res) => setFields(res));
-    getNoteTypeName(index).then((name) => setNoteTypeName(name));
-    getNoteHeadline(index).then((headline) => setNoteHeadline(headline));
+    getFields().then((res) => setFields(res));
+    getNoteTypeName().then((name) => setNoteTypeName(name));
+    getNoteHeadline().then((headline) => setNoteHeadline(headline));
   }, []);
 
   const fieldsObject = {};
@@ -44,25 +41,16 @@ const NoteTypeConfigure = (props) => {
   return <div className="big-form-container">
     <div className="fields-and-viewer">
       <div className="form-container">
-        <Form.Item label="Note Type Name" style={{ fontWeight: 'bold', paddingLeft: '20px' }} className="note-cofig-header">
+        <Form.Item label="Note Type Name" style={{ fontWeight: 'bold', paddingLeft: '20px' }}>
           <Input
             value={noteTypeName}
             className="note-inputs"
             onChange={(e) => {
-              setStoreNoteTypeName(e.target.value, index);
+              setStoreNoteTypeName(e.target.value);
               setNoteTypeName(e.target.value);
-            }}>
+            }}
+          >
           </Input>
-
-          <Popconfirm
-            description="Are you sure you want to delete this note type?"
-            className="remove-note-type-button"
-            title="Confirm"
-            onConfirm={onRemove}
-            okText="Yes"
-            cancelText="No">
-            <Button type="primary" danger>Remove this note type</Button>
-          </Popconfirm>
         </Form.Item>
 
         <Form.Item label={
@@ -75,7 +63,7 @@ const NoteTypeConfigure = (props) => {
             value={noteHeadline}
             className="note-inputs"
             onChange={(e) => {
-              setStoreNoteTypeHeadline(e.target.value, index);
+              setStoreNoteTypeHeadline(e.target.value);
               setNoteHeadline(e.target.value);
             }}
           >
