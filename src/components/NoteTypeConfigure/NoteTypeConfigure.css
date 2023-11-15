@@ -7,7 +7,7 @@
 }
 
 .react-json-view {
-    height: 700px;
+    height: 600px;
     overflow: scroll;
 }
 
@@ -24,6 +24,10 @@
 .note-inputs {
     width: 40%;
     float: left;
+}
+
+.remove-note-type-button {
+    margin-right: 100px;
 }
 
 .remove-field-btn {
