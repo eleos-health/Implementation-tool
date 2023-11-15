@@ -4,39 +4,37 @@ import {
 } from 'antd';
 import JSONInput from 'react-json-editor-ajrm';
 import locale from 'react-json-editor-ajrm/locale/en';
-import { getAllNoteTypes } from '../../context/Context';
+import { getFields, getNoteHeadline, getNoteTypeName } from '../../context/Context';
 import './EhrConfigObject.css';
 import { getEhrBasicObject } from '../../utils';
 import { getEhrNoteContextIdentifier, getFieldIdentifier } from './utils';
-import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 
 const EhrConfigObject = () => {
-  const [noteTypes, setNoteTypes] = useState([]);
+  const [fields, setFields] = useState([]);
+  const [noteTypeName, setNoteTypeName] = useState('');
+  const [noteHeadline, setNoteHeadline] = useState('');
   const [ehr, setEhr] = useState('');
   const [configurationObject, setConfigurationObject] = useState({});
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    getAllNoteTypes().then((res) => setNoteTypes(res));
+    getFields().then((res) => setFields(res));
+    getNoteTypeName().then((name) => setNoteTypeName(name));
+    getNoteHeadline().then((headline) => setNoteHeadline(headline));
   }, []);
 
   const onEhrSelect = (value: string) => {
     setEhr(value);
     const ehrConfigObj: any = getEhrBasicObject(value);
-    const progressNoteItemCopy = ehrConfigObj.progress_notes[0];
-    let reportFields = {};
-    noteTypes.forEach((noteType, index: number) => {
-      noteType.fields.forEach((field: Field) => {
-        const { key, title } = field;
-        reportFields[key] = getFieldIdentifier(value, title);
-      });
-      ehrConfigObj.progress_notes[index] = { ...progressNoteItemCopy };
-      ehrConfigObj.progress_notes[index].report_fields = reportFields;
-      ehrConfigObj.progress_notes[index].type = noteType.name;
-      ehrConfigObj.progress_notes[index].context = getEhrNoteContextIdentifier(value, noteType.noteHeadline);
-      setConfigurationObject(ehrConfigObj);
-      reportFields = {};
+    const reportFields = {};
+    fields.forEach((field) => {
+      const { key, title } = field;
+      reportFields[key] = getFieldIdentifier(value, title);
     });
+    ehrConfigObj.progress_notes[0].report_fields = reportFields;
+    ehrConfigObj.progress_notes[0].type = noteTypeName;
+    ehrConfigObj.progress_notes[0].context = getEhrNoteContextIdentifier(value, noteHeadline);
+    setConfigurationObject(ehrConfigObj);
   };
 
   const getEhrIdentifierText = () => {
