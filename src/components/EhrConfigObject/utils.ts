@@ -55,3 +55,12 @@ export const getEhrNoteContextIdentifier = (ehr: string, value: string) => {
     return '';
   }
 };
+
+export const getParentSelector = (ehr: string, value: string) => {
+  switch (ehr) {
+  case 'pce':
+    return `tr:has(span:contains(${value})):contains():last`;
+  default:
+    return null;
+  }
+};
