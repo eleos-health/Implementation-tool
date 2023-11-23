@@ -27,7 +27,8 @@ export const setNewNoteType = () => {
 
 export const removeNoteType = (index: number) => {
   const noteTypesCopy = Context.noteTypes;
-  Context.noteTypes = noteTypesCopy.splice(index, 1);
+  noteTypesCopy.splice(index, 1);
+  Context.noteTypes = noteTypesCopy;
   chrome.storage.local.set({ noteTypes: noteTypesCopy });
 };
 

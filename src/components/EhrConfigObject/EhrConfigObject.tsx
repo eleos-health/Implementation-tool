@@ -7,7 +7,7 @@ import locale from 'react-json-editor-ajrm/locale/en';
 import { getAllNoteTypes } from '../../context/Context';
 import './EhrConfigObject.css';
 import { getEhrBasicObject } from '../../utils';
-import { getEhrNoteContextIdentifier, getFieldIdentifier } from './utils';
+import { getEhrNoteContextIdentifier, getFieldIdentifier, getParentSelector } from './utils';
 import { Field } from '../NoteTypeConfigure/NoteTypeConfigure';
 
 const EhrConfigObject = () => {
@@ -20,20 +20,21 @@ const EhrConfigObject = () => {
     getAllNoteTypes().then((res) => setNoteTypes(res));
   }, []);
 
-  const onEhrSelect = (value: string) => {
-    setEhr(value);
-    const ehrConfigObj: any = getEhrBasicObject(value);
+  const onEhrSelect = (ehrValue: string) => {
+    setEhr(ehrValue);
+    const ehrConfigObj: any = getEhrBasicObject(ehrValue);
     const progressNoteItemCopy = ehrConfigObj.progress_notes[0];
     let reportFields = {};
     noteTypes.forEach((noteType, index: number) => {
       noteType.fields.forEach((field: Field) => {
         const { key, title } = field;
-        reportFields[key] = getFieldIdentifier(value, title);
+        reportFields[key] = getFieldIdentifier(ehrValue, title);
       });
       ehrConfigObj.progress_notes[index] = { ...progressNoteItemCopy };
       ehrConfigObj.progress_notes[index].report_fields = reportFields;
       ehrConfigObj.progress_notes[index].type = noteType.name;
-      ehrConfigObj.progress_notes[index].context = getEhrNoteContextIdentifier(value, noteType.noteHeadline);
+      ehrConfigObj.progress_notes[index].context = getEhrNoteContextIdentifier(ehrValue, noteType.noteHeadline);
+      ehrConfigObj.progress_notes[index].parent_selector = getParentSelector(ehrValue, noteType.fields[0].title) || ehrConfigObj.progress_notes[index].parent_selector;
       setConfigurationObject(ehrConfigObj);
       reportFields = {};
     });

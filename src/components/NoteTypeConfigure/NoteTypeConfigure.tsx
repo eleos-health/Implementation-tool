@@ -34,9 +34,13 @@ const NoteTypeConfigure = (props) => {
 
   useEffect(() => {
     getFields(index).then((res) => setFields(res));
+  }, [fields]);
+  useEffect(() => {
     getNoteTypeName(index).then((name) => setNoteTypeName(name));
+  }, [noteTypeName]);
+  useEffect(() => {
     getNoteHeadline(index).then((headline) => setNoteHeadline(headline));
-  }, []);
+  }, [noteHeadline]);
 
   const fieldsObject = {};
   fieldsObject[noteTypeName] = fields;
@@ -67,7 +71,7 @@ const NoteTypeConfigure = (props) => {
 
         <Form.Item label={
           <div>EHR Note Headline
-            <Tooltip title="Go to the EHR note and copy and past the exact note headline" >
+            <Tooltip title="Go to the EHR note and copy and paste the exact note headline" >
               <InfoCircleOutlined className="ehr-session-info-tooltip" style={{ padding: '6px' }} />
             </Tooltip></div>}
         style={{ fontWeight: 'bold', paddingLeft: '20px' }}>
