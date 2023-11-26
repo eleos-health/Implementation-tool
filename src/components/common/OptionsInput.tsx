@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 
 const OptionsInput = (props: any) => {
-  const { optionsHandler } = props;
-  const [options, setOptions] = useState([]);
+  const { optionsHandler, defaultOptions = [] } = props;
+  const [options, setOptions] = useState(defaultOptions);
   const [inputVisible, setInputVisible] = useState(false);
   const [inputValue, setInputValue] = useState('');
 

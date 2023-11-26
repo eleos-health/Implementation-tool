@@ -204,7 +204,7 @@ const FieldCreatorForm = (props: FormProps) => {
           shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
           {({ getFieldValue }) => ((getFieldValue('type') && getFieldValue('type') !== 'textarea')
             ? <Form.Item label="Options" name="options">
-              <OptionsInput optionsHandler={handleOptions}></OptionsInput>
+              <OptionsInput optionsHandler={handleOptions} defaultOptions={formField.options}></OptionsInput>
             </Form.Item>
             : null)}
         </Form.Item>
