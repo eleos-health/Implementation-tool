@@ -218,11 +218,8 @@ const FieldCreatorForm = (props: FormProps) => {
             <Select.Option value="dropdown">Dropdown</Select.Option>
           </Select>
         </Form.Item>
-        <Form.Item noStyle shouldUpdate={((prevValues, currentValues) => prevValues.type !== currentValues.type)}>
-          {({ getFieldValue }) => (getFieldValue('type') === 'textarea' || !(getFieldValue('type'))
-            ? <Form.Item label="Conditions" name="conditions">
-              <ConditionalFieldsModal fields={fields} updateFormField={updateFormField}/>
-            </Form.Item> : null)}
+        <Form.Item label="Conditions" name="conditions">
+          <ConditionalFieldsModal fields={fields} updateFormField={updateFormField}/>
         </Form.Item>
         <Form.Item wrapperCol={{ offset: 6, span: 12 }}>
           <Button type="primary" htmlType="submit" className="add-field-button">

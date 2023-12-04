@@ -4,7 +4,6 @@ import {
   Link,
   Routes,
 } from 'react-router-dom';
-import { MyContext } from './context/Context2';
 import CollapsedNoteTypes from './components/CollapsedNoteTypes/CollapsedNoteTypes';
 import EhrConfigObject from './components/EhrConfigObject/EhrConfigObject';
 
