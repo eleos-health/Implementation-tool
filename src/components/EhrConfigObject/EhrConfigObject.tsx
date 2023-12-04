@@ -27,8 +27,8 @@ const EhrConfigObject = () => {
     let reportFields = {};
     noteTypes.forEach((noteType, index: number) => {
       noteType.fields.forEach((field: Field) => {
-        const { key, title } = field;
-        reportFields[key] = getFieldIdentifier(ehrValue, title);
+        const { key, title, field_type } = field;
+        reportFields[key] = getFieldIdentifier(ehrValue, title, field_type);
       });
       ehrConfigObj.progress_notes[index] = { ...progressNoteItemCopy };
       ehrConfigObj.progress_notes[index].report_fields = reportFields;

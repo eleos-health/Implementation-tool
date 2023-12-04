@@ -1,4 +1,4 @@
-export const getFieldIdentifier = (ehr: string, title: string) => {
+export const getFieldIdentifier = (ehr: string, title: string, type: string) => {
   switch (ehr) {
   case 'carelogic':
     return `tr[class*=container]:has(td:contains(${title || ''}:)):contains():last`;
@@ -9,7 +9,7 @@ export const getFieldIdentifier = (ehr: string, title: string) => {
   case 'pce':
     return `tr:has(span:contains(${title || ''})):contains():last`;
   case 'crediblebh':
-    return `tr:has(table:has(td:contains(${title || ''})):last)`;
+    return type === 'textarea' ? `tr:has(table:has(td:contains(${title || ''})):last) + tr` : `tr:has(table:has(td:contains(${title || ''})):last)`;
   case 'myevolve':
     return `div.clearfix:has(label[class*='testQuestionLabel']:contains(${title || ''})):contains()`;
   case 'ehana':
