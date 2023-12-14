@@ -17,6 +17,7 @@ export const carelogicConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: '#sb_submit',
   progress_notes: [
     {
       type: '',
@@ -24,7 +25,6 @@ export const carelogicConfig = {
       page_id: 'General Progress Note',
       category: 'notes',
       report_fields: {},
-      submit_button: '#sb_submit',
       is_note_signed: 'td td:has(input:disabled)',
       parent_selector: '#moduleContentBlock',
       with_absolute_position: true,

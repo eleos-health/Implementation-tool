@@ -16,13 +16,13 @@ export const kipuConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: '.btn.btn-primary:has(span:contains(\'Sign & Submit\')):contains()',
   progress_notes: [
     {
       type: '',
       context: 'div#sub_nav_content div#evaluation:contains(Progress Note-), div#sub_nav_content div#evaluation:contains(DAP Note for Secondary Therapy)',
       category: 'notes',
       report_fields: {},
-      submit_button: '.btn.btn-primary:has(span:contains(\'Sign & Submit\')):contains()',
       is_note_signed: 'div.wrap:has(img[alt=\'signature\'])',
       parent_selector: '.patient_evaluation_item:has(div:contains(\'Golden Thread\')):contains()',
       form_note_selector: 'form[action*=patient_evaluations]',

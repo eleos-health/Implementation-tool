@@ -16,13 +16,13 @@ export const smartcareConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: '#Button_DocumentInformation_Sign',
   progress_notes: [
     {
       type: 'AuroraReport',
       context: '#DivMainPageContent:has(tr:has(span:contains(Individual Service Note))):last',
       category: 'notes',
       report_fields: {},
-      submit_button: '#Button_DocumentInformation_Sign',
       parent_selector: 'div.DocumentScreen tr:has(td.height1) + tr:has(span:contains(Safety Plan))',
       form_note_selector: 'div.DocumentScreen table tbody:first',
       eleos_iframe_container_styles: {

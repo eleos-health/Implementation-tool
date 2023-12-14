@@ -8,13 +8,13 @@ export const ehanaConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: 'a#eHanaFrame_LCtl_WFctl_NextButton',
   progress_notes: [
     {
       type: 'BrooklineReport',
       context: 'td[class=\'Workflow_TOC_NameCell\'] span:contains(Document):contains()',
       category: 'notes',
       report_fields: {},
-      submit_button: 'a#eHanaFrame_LCtl_WFctl_NextButton',
       parent_selector: 'table:has(div:contains(Case Notes) > span):contains():last',
       service_dropdown: 'select[id=\'eHanaFrame_LCtl_WFctl_WSctl_STStbl_317__STb__STrow0_0_SubTable_Billing Information__STb_PaperContainer-0_Procedure Code\']',
       form_note_selector: '#eHanaFrame_LCtl_WFctl_WSctl_ST_UpdatePanel',

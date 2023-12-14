@@ -9,6 +9,7 @@ export const welligentConfig = {
     use_note_discrepancy: true,
   },
   hide_launcher: true,
+  submit_button: 'input[name=\'btn_Save\']:contains()',
   progress_notes: [
     {
       type: '',
@@ -16,7 +17,6 @@ export const welligentConfig = {
       category: 'notes',
       note_tab: 'a.active:has(span:contains(Enter Notes))',
       report_fields: {},
-      submit_button: 'input[name=\'btn_Save\']:contains()',
       is_note_signed: 'td:contains(This note was approved on):last',
       parent_selector: 'table:has(b:contains(\'Progress Note\')):contains():last',
     },

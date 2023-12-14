@@ -8,13 +8,13 @@ export const EchoConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: '[role=\'button\']:has(span:contains(Save))',
   progress_notes: [
     {
       type: '',
       context: 'button[class*=\'v-nativebutton-echotabsheet-tabitem-selected\']:has(span:contains(Progress Note))',
       category: 'notes',
       report_fields: {},
-      submit_button: '[role=\'button\']:has(span:contains(Save))',
       is_note_signed: 'section[class*=\'SignableModalContent__\'], span[class*=\'ContextBar__chip___\']:contains(Signed)',
       parent_selector: 'div.v-slot.v-slot-echotabsheet-tabbar',
     },
