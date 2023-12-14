@@ -11,6 +11,7 @@ export const myevolveConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: 'a[button-id=\'saveform\'\'][title=\'Save\']',
   progress_notes: [
     {
       type: '',
@@ -22,7 +23,6 @@ export const myevolveConfig = {
       category: 'notes',
       report_fields: {},
       note_title: 'Psychotherapy',
-      submit_button: 'a[button-id=\'saveform\'\'][title=\'Save\']',
       parent_selector: 'div:contains(\'Summary of Service(s) provided\'):last()',
     },
   ],

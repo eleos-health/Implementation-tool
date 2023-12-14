@@ -11,13 +11,13 @@ export const myAvatarConfig = {
   feature_flags: {
     use_note_discrepancy: true,
   },
+  submit_button: 'input[value=\'File Note\']',
   progress_notes: [
     {
       type: 'GaudenziaGroupReport',
       context: 'div.formactivebutton:contains(\'Group Default Notes\')',
       category: 'notes',
       report_fields: {},
-      submit_button: 'input[value=\'File Note\']',
       parent_selector: 'div.rad-page:has(ngx-gridster-item:has(label:contains(\'Note\'))):contains():last',
       eleos_iframe_container_styles: {
         'padding-top': '60px',

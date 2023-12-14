@@ -11,19 +11,13 @@ export const credibleConfig = {
     use_note_discrepancy: true,
   },
   hide_launcher: true,
-  progress_note: {
-    page_id: '',
-    report_fields: {},
-    submit_button: 'input[name=\'Complete\']',
-    parent_selector: ' ',
-  },
+  submit_button: 'input[name=\'Complete\']',
   progress_notes: [
     {
       type: 'OpenheartsReport',
       context: 'div.toolHead:has(h1:contains(\'Counseling/Therapy Note\'))',
       category: 'notes',
       report_fields: {},
-      submit_button: 'input[name=\'Complete\']',
       parent_selector: 'div.toolHead:has(h1:contains(\'Counseling/Therapy Note\'))',
     },
   ],

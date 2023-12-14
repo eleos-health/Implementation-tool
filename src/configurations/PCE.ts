@@ -11,6 +11,7 @@ export const pceConfig = {
     use_note_discrepancy: true,
   },
   hide_launcher: true,
+  submit_button: 'input[id=\'saveChanges\']:contains()',
   progress_notes: [
     {
       type: '',
@@ -19,7 +20,6 @@ export const pceConfig = {
       report_fields: {},
       content_doc: 'frame[name=\'contentFrame\']',
       top_document: 'frame[name=\'TopFrame\']',
-      submit_button: 'input[id=\'saveChanges\']:contains()',
       parent_selector: 'tr:has(span:contains(\'In the past few weeks, have you wished you were dead?\')):contains():last',
       alternate_submit_page: 'frame[name=\'contentFrame\']',
     },
