@@ -15,6 +15,7 @@ export const kipuConfig = {
   },
   feature_flags: {
     use_note_discrepancy: true,
+    use_bi_directional_note: true,
   },
   submit_button: '.btn.btn-primary:has(span:contains(\'Sign & Submit\')):contains()',
   progress_notes: [

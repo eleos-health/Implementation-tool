@@ -15,6 +15,7 @@ export const advancedmd = {
   },
   feature_flags: {
     use_note_discrepancy: true,
+    use_bi_directional_note: true,
   },
   progress_notes: [
     {
