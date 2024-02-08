@@ -7,6 +7,7 @@ export const ehanaConfig = {
   },
   feature_flags: {
     use_note_discrepancy: true,
+    use_bi_directional_note: true,
   },
   submit_button: 'a#eHanaFrame_LCtl_WFctl_NextButton',
   progress_notes: [

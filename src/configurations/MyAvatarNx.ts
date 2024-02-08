@@ -10,6 +10,7 @@ export const myAvatarConfig = {
   },
   feature_flags: {
     use_note_discrepancy: true,
+    use_bi_directional_note: true,
   },
   submit_button: 'input[value=\'File Note\']',
   progress_notes: [

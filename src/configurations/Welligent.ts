@@ -7,6 +7,7 @@ export const welligentConfig = {
   },
   feature_flags: {
     use_note_discrepancy: true,
+    use_bi_directional_note: true,
   },
   hide_launcher: true,
   submit_button: 'input[name=\'btn_Save\']:contains()',
