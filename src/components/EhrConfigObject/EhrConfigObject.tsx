@@ -88,6 +88,7 @@ const EhrConfigObject = () => {
         <Select.Option value="ehana">Ehana</Select.Option>
         <Select.Option value="welligent">Welligent</Select.Option>
         <Select.Option value="echo">Echo</Select.Option>
+        <Select.Option value="exym">Exym</Select.Option>
         {/* <Select.Option value="smartcare">SmartCare</Select.Option> */}
         {/* <Select.Option value="advencedmd">AdvancedMd</Select.Option> */}
       </Select>
