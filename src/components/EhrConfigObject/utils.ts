@@ -21,7 +21,7 @@ export const getFieldIdentifier = (ehr: string, title: string, type: string) => 
   case 'echo':
     return `[id*='${title || ''}']`;
   case 'exym':
-    return `[id*=noteTable] tr:has(span:contains(${title || ''}):last)`;
+    return `tr[id*='main_note']:has(span:contains(${title || ''}):last)`;
   case 'smartcare':
     return;
   case 'advencedmd':
@@ -66,6 +66,8 @@ export const getParentSelector = (ehr: string, value: string) => {
   switch (ehr) {
   case 'pce':
     return `tr:has(span:contains(${value})):contains():last`;
+  case 'exym':
+    return `.tabContent:has(#noteContainer):has(td:contains(${value})) p`;
   default:
     return null;
   }
