@@ -1,3 +1,5 @@
+const concatTitlesIntoSelector = (fieldsTitles: string[] = []) => fieldsTitles.map((title) => `:contains(${title})`).join('');
+
 export const getFieldIdentifier = (ehr: string, title: string, type: string) => {
   switch (ehr) {
   case 'carelogic':
@@ -18,6 +20,8 @@ export const getFieldIdentifier = (ehr: string, title: string, type: string) => 
     return `tr:has(td:contains(${title || ''})):last()`;
   case 'echo':
     return `[id*='${title || ''}']`;
+  case 'exym':
+    return `[id*=noteTable] tr:has(span:contains(${title || ''}):last)`;
   case 'smartcare':
     return;
   case 'advencedmd':
@@ -27,7 +31,7 @@ export const getFieldIdentifier = (ehr: string, title: string, type: string) => 
   }
 };
 
-export const getEhrNoteContextIdentifier = (ehr: string, value: string) => {
+export const getEhrNoteContextIdentifier = (ehr: string, value: string, fieldsTitles?: string[]) => {
   switch (ehr) {
   case 'carelogic':
     return `caption:contains(${value || ''})`;
@@ -47,6 +51,8 @@ export const getEhrNoteContextIdentifier = (ehr: string, value: string) => {
     return `title:contains(${value || ''})`;
   case 'echo':
     return `button[class*='v-nativebutton-echotabsheet-tabitem-selected']:has(span:contains(${value || ''}))`;
+  case 'exym':
+    return `table#ctl00_main_note_noteTable${concatTitlesIntoSelector(fieldsTitles)}`;
   case 'smartcare':
     return;
   case 'advencedmd':

@@ -26,14 +26,16 @@ const EhrConfigObject = () => {
     const progressNoteItemCopy = ehrConfigObj.progress_notes[0];
     let reportFields = {};
     noteTypes.forEach((noteType, index: number) => {
+      const fieldsTitles = [];
       noteType.fields.forEach((field: Field) => {
         const { key, title, field_type } = field;
         reportFields[key] = getFieldIdentifier(ehrValue, title, field_type);
+        fieldsTitles.push(title);
       });
       ehrConfigObj.progress_notes[index] = { ...progressNoteItemCopy };
       ehrConfigObj.progress_notes[index].report_fields = reportFields;
       ehrConfigObj.progress_notes[index].type = noteType.name;
-      ehrConfigObj.progress_notes[index].context = getEhrNoteContextIdentifier(ehrValue, noteType.noteHeadline);
+      ehrConfigObj.progress_notes[index].context = getEhrNoteContextIdentifier(ehrValue, noteType.noteHeadline, fieldsTitles);
       ehrConfigObj.progress_notes[index].parent_selector = getParentSelector(ehrValue, noteType.fields[0].title) || ehrConfigObj.progress_notes[index].parent_selector;
       setConfigurationObject(ehrConfigObj);
       reportFields = {};
