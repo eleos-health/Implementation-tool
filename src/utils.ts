@@ -9,6 +9,7 @@ import { welligentConfig } from './configurations/Welligent';
 import { EchoConfig } from './configurations/Echo';
 import { smartcareConfig } from './configurations/Smartcare';
 import { advancedmd } from './configurations/Advancedmd';
+import { exymConfig } from './configurations/Exym';
 
 export const getEhrBasicObject = (ehr: string) => {
   switch (ehr) {
@@ -34,6 +35,8 @@ export const getEhrBasicObject = (ehr: string) => {
     return smartcareConfig;
   case 'advencedmd':
     return advancedmd;
+  case 'exym':
+    return exymConfig;
   default:
     return {};
   }
