@@ -21,7 +21,7 @@ export const getFieldIdentifier = (ehr: string, title: string, type: string) => 
   case 'echo':
     return `[id*='${title || ''}']`;
   case 'exym':
-    return `tr[id*='main_note']:has(span:contains(${title || ''}):last)`;
+    return `tr[id*='main_note']:has(span:contains(${title || ''})):last`;
   case 'smartcare':
     return;
   case 'advencedmd':
